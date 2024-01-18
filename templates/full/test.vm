@@ -1,0 +1,7 @@
+    #set($subject = "Mensagem de teste")
+<!DOCTYPE html>
+<html>
+<body>
+Mensagem de teste
+</body>
+</html>

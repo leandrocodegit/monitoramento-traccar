@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="changelog-6.2">
+
+    <changeSet author="author" id="changelog-6.2">
+
+
+        <createProcedure catalogName="rotinas"
+                         dbms="mysql"
+                         encoding="UTF-8"
+                         procedureName="BUSCA_ROTINAS"
+                         replaceIfExists="true">
+            <![CDATA[
+
+  CREATE DEFINER=`root`@`localhost` PROCEDURE `BUSCA_ROTINAS`()
+BEGIN
+SELECT rotina.*
+            FROM tc_rotinas AS rotina
+            LEFT JOIN tc_events AS evento ON rotina.id = evento.rotinaid
+            WHERE evento.rotinaid IS NULL
+            OR (DATE(evento.eventtime) < DATE(NOW())
+            AND NOT EXISTS (SELECT 1 FROM tc_events WHERE rotina.id = rotinaid AND DATE(eventtime) = DATE(NOW())))
+            AND EXISTS(SELECT 1 FROM tc_rotinas_dias_semana AS dias WHERE rotina.id = dias.rotinaid AND dias.dia IN(DAYOFWEEK(NOW())))
+            AND NOT EXISTS(SELECT * FROM tc_dias_excecao AS de
+            INNER JOIN tc_rotinas_excecoes AS re ON de.id = re.excecaoid
+            AND re.rotinaid = rotina.id
+            AND de.dia = DAYOFMONTH(NOW())
+            AND de.mes = MONTH(NOW()))
+            AND TIMEDIFF(CURTIME(), TIME(rotina.horainicial)) > 0
+            AND TIMEDIFF(CURTIME(), TIME(rotina.horaFinal)) > 0
+            GROUP BY rotina.id;
+            END
+
+            ]]>
+        </createProcedure>
+
+        <createProcedure catalogName="rotinas"
+                         dbms="mysql"
+                         encoding="UTF-8"
+                         procedureName="USERS_NOTIFICATIONS"
+                         replaceIfExists="true">
+            <![CDATA[
+
+            CREATE DEFINER=`root`@`%` PROCEDURE `USERS_NOTIFICATIONS`(IN TIPO_NOTIFICATION VARCHAR(45), IN USER_ID INT, IN DEVICE_ID INT)
+            BEGIN
+
+            SELECT user.* FROM tc_users AS user
+            INNER JOIN tc_user_device AS user_device ON user.id = user_device.userid
+            INNER JOIN tc_user_notification AS push ON user.id = push.userid
+            INNER JOIN tc_notifications AS notification ON notification.id = push.notificationid
+            WHERE user_device.deviceid = DEVICE_ID
+            AND notification.type = TIPO_NOTIFICATION
+            AND user.id != USER_ID
+            GROUP BY user.id;
+
+            END;
+
+            ]]>
+        </createProcedure>
+
+        <createProcedure catalogName="bipes"
+                         dbms="mysql"
+                         encoding="UTF-8"
+                         procedureName="BUSCA_BIPES"
+                         replaceIfExists="true">
+            <![CDATA[
+
+            CREATE DEFINER=`root`@`%` PROCEDURE `BUSCA_BIPES`()
+            BEGIN
+            SELECT *, NOW() FROM tc_bipes WHERE expiracao < NOW() AND ativo = 1;
+            END
+
+            ]]>
+        </createProcedure>
+
+
+    </changeSet>
+
+</databaseChangeLog>

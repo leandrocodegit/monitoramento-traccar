@@ -1,0 +1,14 @@
+.project
+.settings
+.tern-project
+.DS_Store
+nbproject/
+web/app.min.js
+web/theme
+web/modern
+web/lib
+sencha-error-*
+node_modules
+
+.*.swp
+*~
