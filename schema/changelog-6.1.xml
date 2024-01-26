@@ -12,7 +12,7 @@
       <column name="id" type="INT" autoIncrement="true">
         <constraints primaryKey="true" />
       </column>
-      <column name="type" type="VARCHAR(32)">
+      <column name="tipoEvento" type="VARCHAR(32)">
         <constraints nullable="false" />
       </column>
       <column name="nome" type="VARCHAR(128)">
@@ -46,10 +46,10 @@
 
     <createTable tableName="tc_rotinas_dias_semana">
       <column name="rotinaid" type="INT">
-        <constraints nullable="false" />
+        <constraints nullable="false" primaryKey="true" />
       </column>
       <column name="dia" type="INT">
-        <constraints nullable="false" />
+        <constraints nullable="false" primaryKey="true" />
       </column>
     </createTable>
 
@@ -60,24 +60,14 @@
         <constraints primaryKey="true" />
       </column>
       <column name="dia" type="INT">
-        <constraints nullable="false" />
+        <constraints nullable="false"/>
       </column>
       <column name="mes" type="INT">
-        <constraints nullable="false" />
+        <constraints nullable="false"/>
       </column>
     </createTable>
 
-    <createTable tableName="tc_rotinas_excecoes">
-      <column name="rotinaid" type="INT">
-        <constraints nullable="false" />
-      </column>
-      <column name="excecaoid" type="INT">
-        <constraints nullable="false" />
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint baseTableName="tc_rotinas_excecoes" baseColumnNames="rotinaid" constraintName="fk_tc_rotinas_excecoes_rotinaid" referencedTableName="tc_rotinas" referencedColumnNames="id" onDelete="CASCADE" />
-    <addForeignKeyConstraint baseTableName="tc_rotinas_excecoes" baseColumnNames="excecaoid" constraintName="fk_tc_rotinas_excecoes_excecaoid" referencedTableName="tc_dias_excecao" referencedColumnNames="id" onDelete="CASCADE" />
+    <addForeignKeyConstraint baseTableName="tc_dias_excecao" baseColumnNames="rotinaid" constraintName="fk_tc_rotinas_excecoes_rotinaid" referencedTableName="tc_rotinas" referencedColumnNames="id" onDelete="CASCADE" />
 
   </changeSet>
 

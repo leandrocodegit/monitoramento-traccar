@@ -41,7 +41,7 @@
 
     <addForeignKeyConstraint baseTableName="tc_bipes" baseColumnNames="userDestino" constraintName="fk_tc_bipes_userDestinoid" referencedTableName="tc_users" referencedColumnNames="id" onDelete="SET NULL" />
     <addForeignKeyConstraint baseTableName="tc_bipes" baseColumnNames="userOrigem" constraintName="fk_tc_bipes_userOrigemid" referencedTableName="tc_users" referencedColumnNames="id" onDelete="SET NULL" />
-    <addForeignKeyConstraint baseTableName="tc_events" baseColumnNames="rotinaid" constraintName="fk_event_rotinaid" referencedTableName="tc_rotinas" referencedColumnNames="id" onDelete="CASCADE" />
+<!--    <addForeignKeyConstraint baseTableName="tc_events" baseColumnNames="rotinaid" constraintName="fk_event_rotinaid" referencedTableName="tc_rotinas" referencedColumnNames="id" onDelete="CASCADE" />-->
 
 
   </changeSet>

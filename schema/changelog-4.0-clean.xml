@@ -179,7 +179,7 @@
       <column name="name" type="VARCHAR(128)">
         <constraints nullable="false" />
       </column>
-      <column name="description" type="VARCHAR(128)" />
+      <column name="description" type="VARCHAR(128)" defaultValue="''"/>
       <column name="area" type="VARCHAR(4096)">
         <constraints nullable="false" />
       </column>
