@@ -21,15 +21,12 @@ BEGIN
 SELECT rotina.*
             FROM tc_rotinas AS rotina
             LEFT JOIN tc_events AS evento ON rotina.id = evento.rotinaid
-            WHERE evento.rotinaid IS NULL
-            OR (DATE(evento.eventtime) < DATE(NOW())
-            AND NOT EXISTS (SELECT 1 FROM tc_events WHERE rotina.id = rotinaid AND DATE(eventtime) = DATE(NOW())))
+            WHERE  NOT EXISTS (SELECT 1 FROM tc_events WHERE rotina.id = rotinaid AND DATE(eventtime) = DATE(NOW()))
             AND EXISTS(SELECT 1 FROM tc_rotinas_dias_semana AS dias WHERE rotina.id = dias.rotinaid AND dias.dia IN(DAYOFWEEK(NOW())))
-            AND NOT EXISTS(SELECT * FROM tc_dias_excecao AS de
-            INNER JOIN tc_rotinas_excecoes AS re ON de.id = re.excecaoid
-            AND re.rotinaid = rotina.id
-            AND de.dia = DAYOFMONTH(NOW())
-            AND de.mes = MONTH(NOW()))
+            AND NOT EXISTS(SELECT * FROM tc_dias_excecao AS excecao
+            WHERE excecao.rotinaid = rotina.id
+            AND excecao.dia = DAYOFMONTH(NOW())
+            AND excecao.mes = MONTH(NOW()))
             AND TIMEDIFF(CURTIME(), TIME(rotina.horainicial)) > 0
             AND TIMEDIFF(CURTIME(), TIME(rotina.horaFinal)) > 0
             GROUP BY rotina.id;
@@ -77,7 +74,25 @@ SELECT rotina.*
             ]]>
         </createProcedure>
 
+        <createProcedure catalogName="valida"
+                         dbms="mysql"
+                         encoding="UTF-8"
+                         procedureName="VALIDA_EVENTO_ROTINA"
+                         replaceIfExists="true">
+            <![CDATA[
 
+            CREATE DEFINER=`root`@`localhost` PROCEDURE `VALIDA_EVENTO_ROTINA`(ROTINA_ID INT, TIPO VARCHAR(45))
+            BEGIN
+            SELECT *
+            FROM tc_events AS evento
+            WHERE DATE(evento.eventtime) = curdate()
+            AND evento = ROTINA_ID
+            AND rotinaid = TIPO
+            LIMIT 1;
+            END
+
+            ]]>
+        </createProcedure>
     </changeSet>
 
 </databaseChangeLog>

@@ -272,6 +272,11 @@ public class ConnectionManager implements BroadcastInterface {
             LOGGER.warn("Update device status error", e);
         }
 
+        Position position = new Position();
+        position.setId(1);
+
+
+
         updateDevice(true, device);
     }
 

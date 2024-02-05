@@ -8,10 +8,6 @@
 
   <changeSet author="author" id="changelog-5.1">
 
-    <createIndex tableName="tc_drivers" indexName="idx_drivers_uniqueid">
-      <column name="uniqueid" />
-    </createIndex>
-
     <createIndex tableName="tc_devices" indexName="idx_devices_uniqueid">
       <column name="uniqueid" />
     </createIndex>

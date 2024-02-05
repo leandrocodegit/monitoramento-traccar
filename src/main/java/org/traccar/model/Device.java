@@ -37,6 +37,25 @@ public class Device extends GroupedModel implements Disableable, Schedulable {
     }
 
     private String name;
+    private Long conta;
+
+    private long responsavelId;
+
+    public long getConta() {
+        return conta;
+    }
+
+    public void setConta(long conta) {
+        this.conta = conta;
+    }
+
+    public Long getResponsavelId() {
+        return responsavelId;
+    }
+
+    public void setResponsavelId(long responsavelId) {
+        this.responsavelId = responsavelId;
+    }
 
     public String getName() {
         return name;

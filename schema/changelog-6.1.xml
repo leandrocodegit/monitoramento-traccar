@@ -12,8 +12,8 @@
       <column name="id" type="INT" autoIncrement="true">
         <constraints primaryKey="true" />
       </column>
-      <column name="tipoEvento" type="VARCHAR(32)">
-        <constraints nullable="false" />
+      <column name="notificacaoId" type="INT">
+        <constraints nullable="true" />
       </column>
       <column name="nome" type="VARCHAR(128)">
         <constraints nullable="false" />
@@ -33,15 +33,15 @@
       <column name="geofenceId" type="INT">
         <constraints nullable="true" />
       </column>
-      <column name="userid" type="INT">
+      <column name="conta" type="INT">
         <constraints nullable="true" />
       </column>
     </createTable>
 
-
+    <addForeignKeyConstraint baseTableName="tc_rotinas" baseColumnNames="notificacaoId" constraintName="fk_tc_notification_deviceid" referencedTableName="tc_notifications" referencedColumnNames="id" onDelete="SET NULL" />
     <addForeignKeyConstraint baseTableName="tc_rotinas" baseColumnNames="deviceid" constraintName="fk_tc_rotinas_deviceid" referencedTableName="tc_devices" referencedColumnNames="id" onDelete="SET NULL" />
     <addForeignKeyConstraint baseTableName="tc_rotinas" baseColumnNames="geofenceId" constraintName="fk_tc_rotinas_geofenceid" referencedTableName="tc_geofences" referencedColumnNames="id" onDelete="SET NULL" />
-    <addForeignKeyConstraint baseTableName="tc_rotinas" baseColumnNames="userid" constraintName="fk_tc_rotinas_userid" referencedTableName="tc_users" referencedColumnNames="id" onDelete="SET NULL" />
+    <addForeignKeyConstraint baseTableName="tc_rotinas" baseColumnNames="conta" constraintName="fk_tc_rotina_contaid" referencedTableName="tc_contas" referencedColumnNames="id" onDelete="SET NULL" />
 
 
     <createTable tableName="tc_rotinas_dias_semana">
@@ -63,6 +63,9 @@
         <constraints nullable="false"/>
       </column>
       <column name="mes" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rotinaid" type="INT">
         <constraints nullable="false"/>
       </column>
     </createTable>

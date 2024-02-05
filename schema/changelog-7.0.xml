@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="changelog-7.0">
+
+  <changeSet author="author" id="changelog-7.0">
+
+    <addColumn tableName="tc_notifications">
+      <column name="nome" type="VARCHAR(10)" />
+    </addColumn>
+
+    <insert tableName="tc_notifications">
+      <column name="nome" value="Movimento"/>
+      <column name="type" value="deviceMoving"/>
+      <column name="notificators" value="firebase"/>
+    </insert>
+
+    <insert tableName="tc_notifications">
+      <column name="nome" value="Entrada"/>
+      <column name="type" value="geofenceExit"/>
+      <column name="notificators" value="firebase"/>
+    </insert>
+
+    <insert tableName="tc_notifications">
+      <column name="nome" value="Saida"/>
+      <column name="type" value="geofenceEnter"/>
+      <column name="notificators" value="firebase"/>
+    </insert>
+
+    <insert tableName="tc_notifications">
+      <column name="nome" value="Online"/>
+      <column name="type" value="deviceOnline"/>
+      <column name="notificators" value="firebase"/>
+    </insert>
+
+    <insert tableName="tc_notifications">
+      <column name="nome" value="Offline"/>
+      <column name="type" value="deviceOffline"/>
+      <column name="notificators" value="firebase"/>
+    </insert>
+
+    <insert tableName="tc_notifications">
+      <column name="nome" value="Rotina"/>
+      <column name="type" value="rotinaIncompleta"/>
+      <column name="notificators" value="firebase"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

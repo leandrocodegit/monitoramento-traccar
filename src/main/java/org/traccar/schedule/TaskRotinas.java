@@ -131,31 +131,33 @@ public class TaskRotinas implements ScheduleTask, BroadcastInterface {
                             Event evt = new Event();
 
                             evt.setEventTime(new Date());
-                            evt.setDeviceId(1);
+                            evt.setDeviceId(it.getDeviceId());
                             evt.setType("rotinaIncompleta");
                             evt.setRotinaid(it.getId());
+                            evt.setGeofenceId(it.getGeofenceId());
 
-                            notificationManager.updateEvent(false, 1, evt);
+                           // notificationManager.updateEvent(false, 1, evt);
 
-                            storage.addObject(evt, new Request(new Columns.All()));
+                            storage.addObject(evt, new Request(new Columns.Exclude("maintenanceId","attributes")));
+
 
                             Device deviceDestino = storage.getObject(Device.class, new Request(
                                     new Columns.All(),
                                     new Condition.Equals("id", it.getUserId())));
 
-                            var notifications =  storage.getNotificacoes("rotinaIncompleta", it.getDeviceId());
-                            System.out.println(notifications.size());
-                            storage.getNotificacoes("rotinaIncompleta", it.getDeviceId()).forEach(push -> {
-                                try {
-                                    notificatorFirebase.sendDirect(
-                                            push,
-                                            new Mensagem(
-                                                    "Rotina incompleta",
-                                                    deviceDestino.getName() + " não completou sua rotina."));
-                                } catch (MessageException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
+  //                          var notifications =  storage.getNotificacoes("rotinaIncompleta", it.getDeviceId());
+ //                           System.out.println(notifications.size());
+//                            storage.getNotificacoes("rotinaIncompleta", it.getDeviceId()).forEach(push -> {
+//                                try {
+//                                    notificatorFirebase.sendDirect(
+//                                            push,
+//                                            new Mensagem(
+//                                                    "Rotina incompleta",
+//                                                    deviceDestino.getName() + " não completou sua rotina."));
+//                                } catch (MessageException e) {
+//                                    throw new RuntimeException(e);
+//                                }
+//                            });
 
                         } catch (StorageException e) {
                             throw new RuntimeException(e);
