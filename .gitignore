@@ -1,4 +1,5 @@
-target
+target/lib
+target/media
 nbactions.xml
 .classpath
 .project
