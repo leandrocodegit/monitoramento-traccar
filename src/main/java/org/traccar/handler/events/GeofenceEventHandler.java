@@ -41,14 +41,9 @@ public class GeofenceEventHandler extends BaseEventHandler {
     @Override
     protected Map<Event, Position> analyzePosition(Position position) {
 
-       // System.out.println("GeofenceEventHandler => analyzePosition");
-
         if (!PositionUtil.isLatest(cacheManager, position)) {
             return null;
         }
-
-        var usee = cacheManager.getObject(User.class, 1);
-        System.out.println(usee.getName());
 
         List<Long> oldGeofences = new ArrayList<>();
         Position lastPosition = cacheManager.getPosition(position.getDeviceId());

@@ -15,6 +15,9 @@
       <column name="status" type="BOOLEAN" defaultValue="0">
         <constraints nullable="false"/>
       </column>
+      <column name="quantidadeUsers" type="INT"/>
+      <column name="quantidadeDevices" type="INT"/>
+      <column name="expire_at" type="DATETIME" />
       <column name="updated_at" type="DATETIME" />
       <column name="created_at" type="DATETIME" />
     </createTable>

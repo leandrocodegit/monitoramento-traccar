@@ -20,6 +20,7 @@ import org.traccar.api.BaseResource;
 import org.traccar.helper.LogAction;
 import org.traccar.model.Permission;
 import org.traccar.model.UserRestrictions;
+import org.traccar.session.ConnectionManager;
 import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.StorageException;
 
@@ -44,6 +45,8 @@ public class PermissionsResource  extends BaseResource {
 
     @Inject
     private CacheManager cacheManager;
+    @Inject
+    private ConnectionManager connectionManager;
 
     private void checkPermission(Permission permission) throws StorageException {
         if (permissionsService.notAdmin(getUserId())) {
@@ -75,6 +78,9 @@ public class PermissionsResource  extends BaseResource {
                     true,
                     permission.getOwnerClass(), permission.getOwnerId(),
                     permission.getPropertyClass(), permission.getPropertyId());
+            connectionManager.invalidatePermission(false,
+                    permission.getOwnerClass(), permission.getOwnerId(),
+                    permission.getPropertyClass(), permission.getPropertyId());
             LogAction.link(getUserId(),
                     permission.getOwnerClass(), permission.getOwnerId(),
                     permission.getPropertyClass(), permission.getPropertyId());
@@ -98,6 +104,9 @@ public class PermissionsResource  extends BaseResource {
             storage.removePermission(permission);
             cacheManager.invalidatePermission(
                     true,
+                    permission.getOwnerClass(), permission.getOwnerId(),
+                    permission.getPropertyClass(), permission.getPropertyId());
+            connectionManager.invalidatePermission(true,
                     permission.getOwnerClass(), permission.getOwnerId(),
                     permission.getPropertyClass(), permission.getPropertyId());
             LogAction.unlink(getUserId(),

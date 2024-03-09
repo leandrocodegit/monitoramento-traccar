@@ -124,10 +124,41 @@ public abstract class BaseObjectResource<T extends BaseModel> extends BaseResour
 
         storage.removeObject(baseClass, new Request(new Condition.Equals("id", id)));
         cacheManager.invalidate(baseClass, id);
+        connectionManager.invalidateUserPermission(id);
 
         LogAction.remove(getUserId(), baseClass, id);
 
         return Response.noContent().build();
     }
 
+    @Path("password")
+    @PUT
+    public Response updatePassword(T entity) throws StorageException {
+        permissionsService.checkEdit(getUserId(), entity, false);
+        permissionsService.checkPermission(baseClass, getUserId(), entity.getId());
+
+        if (entity instanceof User) {
+            User before = storage.getObject(User.class, new Request(
+                    new Columns.All(), new Condition.Equals("id", entity.getId())));
+            permissionsService.checkUserUpdate(getUserId(), before, (User) entity);
+        } else if (entity instanceof Group) {
+            Group group = (Group) entity;
+            if (group.getId() == group.getGroupId()) {
+                throw new IllegalArgumentException("Cycle in group hierarchy");
+            }
+        }
+
+        if (entity instanceof User) {
+            User user = (User) entity;
+            if (user.getHashedPassword() != null) {
+                storage.updateObject(entity, new Request(
+                        new Columns.Include("hashedPassword", "salt"),
+                        new Condition.Equals("id", entity.getId())));
+            }
+        }
+        cacheManager.updateOrInvalidate(true, entity);
+        LogAction.edit(getUserId(), entity);
+
+        return Response.ok(entity).build();
+    }
 }

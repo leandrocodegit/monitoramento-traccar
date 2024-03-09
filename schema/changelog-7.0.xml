@@ -19,13 +19,13 @@
     </insert>
 
     <insert tableName="tc_notifications">
-      <column name="nome" value="Entrada"/>
+      <column name="nome" value="Saída"/>
       <column name="type" value="geofenceExit"/>
       <column name="notificators" value="firebase"/>
     </insert>
 
     <insert tableName="tc_notifications">
-      <column name="nome" value="Saida"/>
+      <column name="nome" value="Entrada"/>
       <column name="type" value="geofenceEnter"/>
       <column name="notificators" value="firebase"/>
     </insert>

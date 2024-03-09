@@ -142,13 +142,13 @@ public class Device extends GroupedModel implements Disableable, Schedulable {
         this.contact = contact;
     }
 
-    private String category;
+    private long category;
 
-    public String getCategory() {
+    public long getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(long category) {
         this.category = category;
     }
 

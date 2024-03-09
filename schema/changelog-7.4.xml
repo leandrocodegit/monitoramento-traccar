@@ -4,12 +4,12 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
-        logicalFilePath="changelog-7.1">
+        logicalFilePath="changelog-7.4">
 
-  <changeSet author="author" id="changelog-7.1">
+  <changeSet author="author" id="changelog-7.4">
 
-    <addColumn tableName="tc_geofences">
-      <column name="telefone" type="VARCHAR(20)" />
+    <addColumn tableName="tc_devices">
+      <column name="audio" type="BIT(1)" defaultValueBoolean="false" />
     </addColumn>
 
   </changeSet>

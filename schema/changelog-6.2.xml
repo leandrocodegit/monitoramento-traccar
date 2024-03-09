@@ -29,6 +29,7 @@ SELECT rotina.*
             AND excecao.mes = MONTH(NOW()))
             AND TIMEDIFF(CURTIME(), TIME(rotina.horainicial)) > 0
             AND TIMEDIFF(CURTIME(), TIME(rotina.horaFinal)) > 0
+            AND TIMEDIFF(rotina.horaFinal, TIME(rotina.updated_at)) > 0
             GROUP BY rotina.id;
             END
 
@@ -86,8 +87,8 @@ SELECT rotina.*
             SELECT *
             FROM tc_events AS evento
             WHERE DATE(evento.eventtime) = curdate()
-            AND evento = ROTINA_ID
-            AND rotinaid = TIPO
+            AND rotinaid = ROTINA_ID
+            AND type = TIPO
             LIMIT 1;
             END
 

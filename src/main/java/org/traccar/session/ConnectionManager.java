@@ -21,17 +21,14 @@ import io.netty.util.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.traccar.Protocol;
+import org.traccar.api.security.PermissionsService;
 import org.traccar.broadcast.BroadcastInterface;
 import org.traccar.broadcast.BroadcastService;
 import org.traccar.config.Config;
 import org.traccar.config.Keys;
 import org.traccar.database.DeviceLookupService;
 import org.traccar.database.NotificationManager;
-import org.traccar.model.BaseModel;
-import org.traccar.model.Device;
-import org.traccar.model.Event;
-import org.traccar.model.Position;
-import org.traccar.model.User;
+import org.traccar.model.*;
 import org.traccar.session.cache.CacheManager;
 import org.traccar.storage.Storage;
 import org.traccar.storage.StorageException;
@@ -41,6 +38,7 @@ import org.traccar.storage.query.Request;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Arrays;
@@ -164,7 +162,7 @@ public class ConnectionManager implements BroadcastInterface {
         Device device = new Device();
         device.setName(uniqueId);
         device.setUniqueId(uniqueId);
-        device.setCategory(config.getString(Keys.DATABASE_REGISTER_UNKNOWN_DEFAULT_CATEGORY));
+        device.setCategory(0);
 
         long defaultGroupId = config.getLong(Keys.DATABASE_REGISTER_UNKNOWN_DEFAULT_GROUP_ID);
         if (defaultGroupId != 0) {
@@ -276,7 +274,6 @@ public class ConnectionManager implements BroadcastInterface {
         position.setId(1);
 
 
-
         updateDevice(true, device);
     }
 
@@ -336,7 +333,11 @@ public class ConnectionManager implements BroadcastInterface {
             boolean local,
             Class<? extends BaseModel> clazz1, long id1,
             Class<? extends BaseModel> clazz2, long id2) {
-        if (clazz1.equals(User.class) && clazz2.equals(Device.class)) {
+        if (local) {
+            if (userDevices.containsKey(id1)) {
+                deviceUsers.remove(id2, new HashSet<>(List.of(id1)));
+            }
+        } else if (clazz1.equals(User.class) && clazz2.equals(Device.class)) {
             if (listeners.containsKey(id1)) {
                 userDevices.get(id1).add(id2);
                 deviceUsers.put(id2, new HashSet<>(List.of(id1)));
@@ -344,10 +345,35 @@ public class ConnectionManager implements BroadcastInterface {
         }
     }
 
+
+    public synchronized void invalidateUserPermission(long userId) {
+        if (listeners.containsKey(userId)) {
+            listeners.remove(userId);
+            userDevices.remove(userId);
+
+            Map<Long, Set<Long>> provisoria = new HashMap<>();
+
+
+            deviceUsers.forEach((deviceId, value) -> {
+                value.forEach((user) -> {
+                    if (user == userId)
+                        provisoria.put(deviceId, new HashSet<>(List.of(userId)));
+                 });
+            });
+
+            provisoria.forEach((deviceId, value) -> {
+                deviceUsers.remove(deviceId, new HashSet<>(List.of(userId)));
+            });
+        }
+    }
+
     public interface UpdateListener {
         void onKeepalive();
+
         void onUpdateDevice(Device device);
+
         void onUpdatePosition(Position position);
+
         void onUpdateEvent(Event event);
     }
 

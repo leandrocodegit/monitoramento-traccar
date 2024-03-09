@@ -136,7 +136,7 @@ public class TaskRotinas implements ScheduleTask, BroadcastInterface {
                             evt.setRotinaid(it.getId());
                             evt.setGeofenceId(it.getGeofenceId());
 
-                           // notificationManager.updateEvent(false, 1, evt);
+                            notificationManager.updateEvent(false, 1, evt);
 
                             storage.addObject(evt, new Request(new Columns.Exclude("maintenanceId","attributes")));
 

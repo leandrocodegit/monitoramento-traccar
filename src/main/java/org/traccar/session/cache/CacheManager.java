@@ -272,6 +272,7 @@ public class CacheManager implements BroadcastInterface {
             Class<? extends BaseModel> clazz2, long id2) {
         if (local) {
             broadcastService.invalidatePermission(true, clazz1, id1, clazz2, id2);
+
         }
 
         try {

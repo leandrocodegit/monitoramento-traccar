@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+        logicalFilePath="changelog-7.3">
+
+    <changeSet author="author" id="changelog-7.3">
+
+        <createTable tableName="tc_shares">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="deviceId" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="userId" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contaOrigem" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="contaDestino" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ativo" type="BIT(1)" defaultValueBoolean="false" />
+            <column name="aceitar" type="BIT(1)" defaultValueBoolean="false" />
+            <column name="expirated_at" type="DATETIME" />
+            <column name="updated_at" type="DATETIME" />
+            <column name="created_at" type="DATETIME" />
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="tc_shares" baseColumnNames="deviceId"
+                                 constraintName="fk_tc_shares_deviceid" referencedTableName="tc_devices"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="tc_shares" baseColumnNames="userId"
+                                 constraintName="fk_tc_shares_userid" referencedTableName="tc_users"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="tc_shares" baseColumnNames="contaOrigem"
+                                 constraintName="fk_tc_shares_conta_origem_id" referencedTableName="tc_contas"
+                                 referencedColumnNames="id" onDelete="CASCADE"/>
+
+
+
+    </changeSet>
+</databaseChangeLog>

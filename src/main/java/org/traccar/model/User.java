@@ -27,6 +27,15 @@ import java.util.Date;
 public class User extends ExtendedModel implements UserRestrictions, Disableable {
 
     private String name;
+    private Long conta;
+
+    public Long getConta() {
+        return conta;
+    }
+
+    public void setConta(Long conta) {
+        this.conta = conta;
+    }
 
     public String getName() {
         return name;
